@@ -2,6 +2,8 @@
 
 Connects to the ISPApp server using your sessionKey and alarms with sound when hosts or specified hosts are offline.
 
+Click your email address in the top right corner of the ISPApp Dashboard to get your Session Key.
+
 # Building
 
 ```
