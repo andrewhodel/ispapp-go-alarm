@@ -36,4 +36,4 @@ Then copy the text output with no newlines as the `ca_bundle_hex` variable data 
 
 # license
 
-The project ispapp-go-alarm is licensed per the MIT License
+The project ispapp-go-alarm is licensed MIT
