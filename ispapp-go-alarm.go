@@ -147,6 +147,26 @@ func main() {
 
 }
 
+func alarm() {
+
+	if (runtime.GOOS == "darwin") {
+
+		// play sound
+		cmd := exec.Command("afplay", "./alarm.wav")
+		_ = cmd.Run()
+
+	} else if (runtime.GOOS == "linux") {
+
+		// play sound
+		cmd := exec.Command("mplayer", "./alarm.wav")
+		_ = cmd.Run()
+
+	} else if (runtime.GOOS == "windows") {
+
+	}
+
+}
+
 func loop() {
 
 	client := &http.Client{
@@ -161,12 +181,22 @@ func loop() {
 
 	resp, err := client.Get("https://" + domain + ":" + strconv.Itoa(port) + "/api/v1/hosts?sessionKey=" + sessionKey + "&offlineOnly=1&sort=0lastUpdate,1name")
 	if err != nil {
+
 		fmt.Println(err)
+
+		// sound alarm
+		alarm()
+
 	} else {
 
 		htmlData, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
+
 			fmt.Println(err)
+
+			// sound alarm
+			alarm()
+
 		} else {
 
 			//fmt.Println("body", string(htmlData))
@@ -180,6 +210,9 @@ func loop() {
 				if (api_resp.Error != "") {
 
 					fmt.Println("API returned error", api_resp.Error)
+
+					// sound alarm
+					alarm()
 
 				} else {
 
@@ -227,36 +260,26 @@ func loop() {
 						fmt.Println("offline hosts that are alarming", alarming_hosts)
 
 						// sound alarm
-
-						if (runtime.GOOS == "darwin") {
-
-							// play sound
-							cmd := exec.Command("afplay", "./alarm.wav")
-							_ = cmd.Run()
-
-						} else if (runtime.GOOS == "linux") {
-
-							// play sound
-							cmd := exec.Command("mplayer", "./alarm.wav")
-							_ = cmd.Run()
-
-						} else if (runtime.GOOS == "windows") {
-
-						}
+						alarm()
 
 					}
 
 				}
 
 			} else {
+
 				fmt.Println("error parsing JSON", um_err)
+
+				// sound alarm
+				alarm()
+
 			}
 
 		}
 
 	}
 
-	time.Sleep(time.Second * 5)
+	time.Sleep(time.Second * 10)
 
 	go loop()
 
